@@ -1,33 +1,73 @@
-import express, { Express, Request, Response } from 'express';
+import { Request, Response } from 'express';
 const productService = require("../services/productsService");
 
-const getAllProducts = (req: Request, res: Response) => {
-  // *** ADD ***
-  const allProducts = productService.getAllProducts();
-  res.send("Get all products");
+const getAllProducts = async (req: Request, res: Response) => {
+  const allProducts = await productService.getAllProducts();
+  res.send({ status: "OK", data: allProducts });
 };
 
-const getOneProduct = (req: Request, res: Response) => {
-  // *** ADD ***
-  const product = productService.getOneProduct();
-  res.send("Get an existing product");
+const getOneProduct = async (req: Request, res: Response) => {
+  const { ProductId } = req.params;
+  const product = await productService.getOneProduct(ProductId);
+  res.status(201).send({ status: "OK", data: product });
 };
 
-const createNewProduct = (req: Request, res: Response) => {
-  // *** ADD ***
-  const createdProduct = productService.createNewProduct();
-  res.send("Create a new product");
+const createNewProduct = async (req: Request, res: Response) => {
+  const { body } = req;
+
+  if (!body.name || body.name.length > 100 || !body.price) {
+    res
+      .status(400)
+      .send({
+        status: "FAILED",
+        data: {
+          error:
+            "One of the following keys is missing or is empty in request body or is invalid",
+        },
+      });
+    return;
+  }
+
+  const newProduct = {
+    name: body.name,
+    price: body.price,
+  };
+  const createdProduct = await productService.createNewProduct(newProduct);
+  console.log("scont", createdProduct)
+  res.status(201).send({ status: "OK", data: createdProduct });
 };
 
-const updateOneProduct = (req: Request, res: Response) => {
-  // *** ADD ***
-  const updatedProduct = productService.updateOneProduct();
-  res.send("Update an existing product");
+const updateOneProduct = async (req: Request, res: Response) => {
+  const { body } = req;
+  const updatedProductId = body.id || req.params.ProductId
+
+  if (!updatedProductId || !body.name || body.name.length > 100) {
+    res
+      .status(400)
+      .send({
+        status: "FAILED",
+        data: {
+          error:
+            "One of the following keys is missing or is empty in request body",
+        },
+      });
+    return;
+  }
+
+  const updatedProductValues = {
+    _id: updatedProductId,
+    ...body
+  }
+
+  const updatedProduct = await productService.updateOneProduct(updatedProductValues);
+  res.status(201).send({ status: "OK", data: updatedProduct });
 };
 
-const deleteOneProduct = (req: Request, res: Response) => {
-  // *** ADD ***
-  productService.deleteOneProduct();
+const deleteOneProduct = async (req: Request, res: Response) => {
+  const { body } = req;
+  const deletedProductId: string = body.id || req.params.ProductId
+
+  await productService.deleteOneProduct(deletedProductId);
   res.send("Delete an existing product");
 };
 

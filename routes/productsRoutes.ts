@@ -5,12 +5,12 @@ const router = express.Router();
 
 router.get("/", ProductsController.getAllProducts);
 
-router.get("/:ProductsId", ProductsController.getOneProduct);
+router.get("/:ProductId", ProductsController.getOneProduct);
 
 router.post("/", ProductsController.createNewProduct);
 
-router.patch("/:ProductsId", ProductsController.updateOneProduct);
+router.put("/:ProductId", ProductsController.updateOneProduct);
 
-router.delete("/:ProductsId", ProductsController.deleteOneProduct);
+router.delete("/:ProductId", ProductsController.deleteOneProduct);
 
 module.exports = router;
