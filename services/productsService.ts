@@ -32,7 +32,7 @@ const createNewProduct = (newProduct: any) => {
 
 const updateOneProduct = (updatedProductValues: any) => {
   try {
-    const product = Product.findOneAndUpdate({ _id: updatedProductValues._id}, { ...updatedProductValues })
+    const product = Product.findOneAndUpdate({ _id: updatedProductValues._id}, { ...updatedProductValues, updatedAt: new Date() })
     return product;
   } catch (error) {
     console.log(error)
