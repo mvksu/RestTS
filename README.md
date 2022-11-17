@@ -12,5 +12,9 @@
 
 ## Layering
 
-- Requesty są przekierowywane do Routera który następnie w Controllerze inicjuje operację w Service który nastpęnie działa na Baza danych
-- Router -> Controller -> Service -> Data Access Layer -> Service -> Controller -> Router
+- Requesty są przekierowywane do Routera który następnie w Controllerze inicjuje operację w Service Layer który nastpęnie działa na Baza danych
+- Request -> Router -> Controller -> Service -> Data Access Layer -> Service Layer -> Controller -> Router > Response
+
+## Testing
+
+- Do testowania korzystalem z Postmana
